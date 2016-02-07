@@ -4,6 +4,13 @@ module Brainy
   describe Network do
     let (:net) { Network.new(4, 3, 2, 0.25) }
 
+    describe '#initialize' do
+      it 'creates a network with random weights' do
+        weights = net.layers.flatten.map(&:to_a).flatten
+        expect(weights.count).to eq weights.uniq.count
+      end
+    end
+
     describe '#evaluate' do
       it 'evaluates the network for a set of inputs' do
         net.instance_variable_set(:@layers, [

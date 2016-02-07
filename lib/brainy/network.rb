@@ -1,6 +1,6 @@
 module Brainy
   class Network
-    attr_accessor :hidden_layer, :output_layer
+    attr_accessor :layers
 
     def initialize(input_count, hidden_count, output_count, learning_rate)
       @layers = [
