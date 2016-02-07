@@ -8,22 +8,28 @@ module Brainy
           Array.new(output_count) { Vector.elements(Array.new(hidden_count + 1) { rand(-1.0..1.0) }) }
       ]
       @learning_rate = learning_rate
-      @activate = lambda { |x| 1 / (1 + Math.exp(-1 * x)) }
-      @activate_prime = lambda { |x| x * (1 - x) }
+    end
+
+    def activate(x)
+      1 / (1 + Math.exp(-1 * x))
+    end
+
+    def activate_prime(x)
+      x * (1 - x)
     end
 
     def evaluate(inputs)
       @layers.reduce(Vector.elements(inputs)) do |input, layer|
         input = Vector.elements(input.to_a + [1.0])
-        output = layer.map { |node| @activate.call(node.inner_product(input)) }
+        output = layer.map { |node| activate(node.inner_product(input)) }
         Vector.elements(output)
       end
     end
 
     def train!(inputs, expected)
       inputs = Vector.elements(inputs + [1.0])
-      hidden_outs = Vector.elements(@layers.first.map { |node| @activate.call(node.inner_product(inputs)) } + [1.0])
-      output_outs = Vector.elements(@layers.last.map { |node| @activate.call(node.inner_product(hidden_outs)) })
+      hidden_outs = Vector.elements(@layers.first.map { |node| activate(node.inner_product(inputs)) } + [1.0])
+      output_outs = Vector.elements(@layers.last.map { |node| activate(node.inner_product(hidden_outs)) })
       output_deltas = get_output_deltas(expected, output_outs)
       hidden_deltas = get_hidden_deltas(hidden_outs, @layers.last, output_deltas)
       @layers[1] = get_updated_weights(@layers.last, hidden_outs, output_deltas)
@@ -32,14 +38,14 @@ module Brainy
 
     def get_output_deltas(expected, output)
       expected.zip(output.to_a).map do |expect, out|
-        (out - expect) * @activate_prime.call(out)
+        (out - expect) * activate_prime(out)
       end
     end
 
     def get_hidden_deltas(hidden_outs, output_nodes, output_deltas)
       hidden_outs.each_with_index.map do |out, index|
         error = output_nodes.zip(output_deltas).map { |weights, delta| weights[index] * delta }.reduce(:+)
-        error * @activate_prime.call(out)
+        error * activate_prime(out)
       end
     end
 
