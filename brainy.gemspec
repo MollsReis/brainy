@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.version     = '1.0.0'
   s.license     = 'MIT'
   s.summary     = 'An Artificial Neural Network'
-  s.description = 'TODO'
+  s.description = 'Brainy is an Artificial Neural Network (ANN) using the Backpropagation algorithm.'
   s.author      = 'Robert Scott Reis'
   s.email       = 'reis.robert.s@gmail.com'
   s.files       = ['lib/brainy.rb']
