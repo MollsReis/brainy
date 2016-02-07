@@ -2,11 +2,6 @@ module Brainy
   class Network
     attr_accessor :hidden_layer, :output_layer
 
-    #TODO momentum
-    #TODO dropout
-    #TODO multiple hidden layers
-    #TODO customizable activate/activate_prime (with #serialize support)
-
     def initialize(input_count, hidden_count, output_count, learning_rate)
       @layers = [
           Array.new(hidden_count, Vector.elements(Array.new(input_count + 1, rand(-1.0..1.0)))),
