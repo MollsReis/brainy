@@ -1,5 +1,4 @@
-# Brainy
-## An Artificial Neural Network
+# Brainy - An Artificial Neural Network [![Build Status](https://travis-ci.org/EvilScott/brainy.svg?branch=master)](https://travis-ci.org/EvilScott/brainy)
 
 Brainy is an [Artificial Neural Network (ANN)](https://en.wikipedia.org/wiki/Artificial_neural_network) using the 
 [Backpropagation](https://en.wikipedia.org/wiki/Backpropagation) algorithm. It was originally created as part of 
