@@ -4,8 +4,8 @@ module Brainy
 
     def initialize(input_count, hidden_count, output_count, learning_rate)
       @layers = [
-          Array.new(hidden_count, Vector.elements(Array.new(input_count + 1, rand(-1.0..1.0)))),
-          Array.new(output_count, Vector.elements(Array.new(hidden_count + 1, rand(-1.0..1.0))))
+          Array.new(hidden_count) { Vector.elements(Array.new(input_count + 1) { rand(-1.0..1.0) }) },
+          Array.new(output_count) { Vector.elements(Array.new(hidden_count + 1) { rand(-1.0..1.0) }) }
       ]
       @learning_rate = learning_rate
       @activate = lambda { |x| 1 / (1 + Math.exp(-1 * x)) }
@@ -14,15 +14,15 @@ module Brainy
 
     def evaluate(inputs)
       @layers.reduce(Vector.elements(inputs)) do |input, layer|
-        input = Vector.elements(input.to_a + [1])
+        input = Vector.elements(input.to_a + [1.0])
         output = layer.map { |node| @activate.call(node.inner_product(input)) }
         Vector.elements(output)
       end
     end
 
     def train!(inputs, expected)
-      inputs = Vector.elements(inputs + [1])
-      hidden_outs = Vector.elements(@layers.first.map { |node| @activate.call(node.inner_product(inputs)) } + [1])
+      inputs = Vector.elements(inputs + [1.0])
+      hidden_outs = Vector.elements(@layers.first.map { |node| @activate.call(node.inner_product(inputs)) } + [1.0])
       output_outs = Vector.elements(@layers.last.map { |node| @activate.call(node.inner_product(hidden_outs)) })
       output_deltas = get_output_deltas(expected, output_outs)
       hidden_deltas = get_hidden_deltas(hidden_outs, @layers.last, output_deltas)

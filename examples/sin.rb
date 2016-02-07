@@ -16,4 +16,4 @@ mse = 1000.times.map do
   (o - net.evaluate([i]).first) ** 2
 end.reduce(:+) / 1000
 
-puts "your MSE: #{ mse.round(3) }"
+puts "your MSE: #{ mse.round(6) }"
