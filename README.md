@@ -9,7 +9,7 @@ From [examples/sin.rb](https://github.com/EvilScott/brainy/blob/master/examples/
 ```ruby
 # Example using sin wave function
 require_relative '../lib/brainy'
-net = Brainy::Network.new(1, 3, 1, 0.25)
+net = Brainy::Network.new(1, 3, 1)
 
 # training
 4000.times do

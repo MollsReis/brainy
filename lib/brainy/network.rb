@@ -2,32 +2,33 @@ module Brainy
   class Network
     attr_accessor :layers
 
-    def initialize(input_count, hidden_count, output_count, learning_rate)
+    def initialize(input_count, hidden_count, output_count, options = {})
+      options = {
+          learning_rate: 0.25,
+          activate: lambda { |x| 1 / (1 + Math.exp(-1 * x)) },
+          activate_prime: lambda { |x| x * (1 - x) },
+          weight_init: lambda { rand(-1.0..1.0) }
+      }.update(options)
+      @learning_rate = options[:learning_rate]
+      @activate = options[:activate]
+      @activate_prime = options[:activate_prime]
+      @weight_init = options[:weight_init]
       @layers = [
-          Matrix.build(hidden_count, input_count + 1) { rand(-1.0..1.0) },
-          Matrix.build(output_count, hidden_count + 1) { rand(-1.0..1.0) }
+          Matrix.build(hidden_count, input_count + 1) { @weight_init.call },
+          Matrix.build(output_count, hidden_count + 1) { @weight_init.call }
       ]
-      @learning_rate = learning_rate
-    end
-
-    def activate(x)
-      1 / (1 + Math.exp(-1 * x))
-    end
-
-    def activate_prime(x)
-      x * (1 - x)
     end
 
     def evaluate(inputs)
       @layers.reduce(Vector.elements(inputs)) do |input, layer|
-        (layer * Vector.elements(input.to_a + [1.0])).map { |v| activate(v) }
+        (layer * Vector.elements(input.to_a + [1.0])).map(&@activate)
       end
     end
 
     def train!(inputs, expected)
       inputs = Vector.elements(inputs + [1.0])
-      hidden_outs = Vector.elements((@layers.first * inputs).map { |v| activate(v) }.to_a + [1.0])
-      output_outs = (@layers.last * hidden_outs).map { |v| activate(v) }
+      hidden_outs = Vector.elements((@layers.first * inputs).map(&@activate).to_a + [1.0])
+      output_outs = (@layers.last * hidden_outs).map(&@activate)
       output_deltas = get_output_deltas(expected, output_outs)
       hidden_deltas = get_hidden_deltas(hidden_outs, @layers.last, output_deltas)
       @layers[1] = get_updated_weights(@layers.last, hidden_outs, output_deltas)
@@ -36,7 +37,7 @@ module Brainy
 
     def get_output_deltas(expected, output)
       expected.zip(output).map do |expect, out|
-        (out - expect) * activate_prime(out)
+        (out - expect) * @activate_prime.call(out)
       end
     end
 
@@ -44,7 +45,7 @@ module Brainy
       hidden_outs.each_with_index.map do |out, index|
         output_nodes.row_vectors.zip(output_deltas)
             .map { |weights, delta| weights[index] * delta }
-            .reduce(:+) * activate_prime(out)
+            .reduce(:+) * @activate_prime.call(out)
       end
     end
 
@@ -61,10 +62,7 @@ module Brainy
     end
 
     def self.from_serialized(dump)
-      net = YAML.load(dump)
-      net.instance_variable_set(:@activate, lambda { |x| 1 / (1 + Math.exp(-1 * x)) })
-      net.instance_variable_set(:@activate_prime, lambda { |x| x * (1 - x) })
-      net
+      YAML.load(dump)
     end
   end
 end

@@ -2,7 +2,7 @@ require_relative '../../spec_helper'
 
 module Brainy
   describe Network do
-    let (:net) { Network.new(4, 3, 2, 0.25) }
+    let (:net) { Network.new(4, 3, 2) }
 
     describe '#initialize' do
       it 'creates a network with random weights' do
