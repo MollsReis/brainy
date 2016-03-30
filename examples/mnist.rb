@@ -7,6 +7,7 @@
 require 'zlib'
 require_relative '../lib/brainy'
 
+puts 'loading train/test data...'
 label_filenames = %w(train-labels-idx1-ubyte.gz t10k-labels-idx1-ubyte.gz)
 training_labels, testing_labels = label_filenames.reduce([]) do |sets, filename|
   Zlib::GzipReader.open(filename) do |file|
@@ -29,14 +30,23 @@ end
 training_data = training_labels.zip(training_images)
 testing_data = testing_labels.zip(testing_images)
 
-net = Brainy::Network.new(784, 280, 10)
-training_data.each do |datum|
+puts 'training...'
+net = Brainy::Network.new(784, 300, 10)
+training_data.each_with_index do |datum, idx|
   expected, inputs = datum
   net.train!(inputs, expected)
+  print ("\r%% %f" % (100.0 * idx / training_data.length)).ljust(20, ' ')
 end
+print "\r% 100!".ljust(20, ' ') + "\n"
 
-mse = testing_data.map do |datum|
+puts 'testing...'
+mse = testing_data.each_with_index.map do |datum, idx|
   expected, inputs = datum
-  net.evaluate(inputs).zip(expected).map { |x, y| (x - y) ** 2 }.reduce(:+) / 10
+  output = net.evaluate(inputs).zip(expected).map { |x, y| (x - y) ** 2 }.reduce(:+) / 10
+  print ("\r%% %f" % (100 * idx.to_f / testing_data.length)).ljust(20, ' ')
+  output
 end.reduce(:+) / testing_data.count
-puts "MSE: #{mse}"
+print "\r% 100!".ljust(20, ' ') + "\n"
+puts "\nMSE: #{mse}"
+
+File.open('mnist.yaml', 'w') { |file| file.write(net.serialize) }
