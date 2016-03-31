@@ -1,4 +1,6 @@
 # Example training using MNIST OCR set
+# NOTE: this is a time consuming script, took ~5 hours on my MacBook Pro (using JRuby)
+#
 # MNIST dataset files not included, get them here:
 # http://yann.lecun.com/exdb/mnist/
 # MNIST loading code based off code from here:
@@ -35,18 +37,18 @@ net = Brainy::Network.new(784, 300, 10)
 training_data.each_with_index do |datum, idx|
   expected, inputs = datum
   net.train!(inputs, expected)
-  print ("\r%% %f" % (100.0 * idx / training_data.length)).ljust(20, ' ')
+  print ("\r%% %.2f" % (100.0 * idx / training_data.length)).ljust(20, ' ')
 end
-print "\r% 100!".ljust(20, ' ') + "\n"
+print "\r% 100.00".ljust(20, ' ') + "\n"
 
 puts 'testing...'
 mse = testing_data.each_with_index.map do |datum, idx|
   expected, inputs = datum
   output = net.evaluate(inputs).zip(expected).map { |x, y| (x - y) ** 2 }.reduce(:+) / 10
-  print ("\r%% %f" % (100 * idx.to_f / testing_data.length)).ljust(20, ' ')
+  print ("\r%% %.2f" % (100 * idx.to_f / testing_data.length)).ljust(20, ' ')
   output
 end.reduce(:+) / testing_data.count
-print "\r% 100!".ljust(20, ' ') + "\n"
+print "\r% 100.00".ljust(20, ' ') + "\n"
 puts "\nMSE: #{mse}"
 
 File.open('mnist.yaml', 'w') { |file| file.write(net.serialize) }
