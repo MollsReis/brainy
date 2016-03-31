@@ -19,7 +19,7 @@ module Brainy
           learning_rate: 0.25,
           activate: lambda { |x| 1 / (1 + Math.exp(-1 * x)) },
           activate_prime: lambda { |x| x * (1 - x) },
-          weight_init: lambda { rand(-1.0..1.0) }
+          weight_init: lambda { Gaussian.next }
       }
     end
 
