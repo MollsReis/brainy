@@ -4,11 +4,9 @@ module Brainy
   java_import java.util.Random
 
   class Gaussian
-    def initialize
-      @rand = Random.new
-    end
+    @rand = Random.new
 
-    def next
+    def self.next
       @rand.nextGaussian * 0.1
     end
   end
