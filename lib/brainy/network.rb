@@ -3,12 +3,7 @@ module Brainy
     attr_accessor :layers
 
     def initialize(input_count, hidden_count, output_count, options = {})
-      options = {
-          learning_rate: 0.25,
-          activate: lambda { |x| 1 / (1 + Math.exp(-1 * x)) },
-          activate_prime: lambda { |x| x * (1 - x) },
-          weight_init: lambda { rand(-1.0..1.0) }
-      }.update(options)
+      options = default_options.update(options)
       @learning_rate = options[:learning_rate]
       @activate = options[:activate]
       @activate_prime = options[:activate_prime]
@@ -17,6 +12,15 @@ module Brainy
           Matrix.build(hidden_count, input_count + 1) { @weight_init.call },
           Matrix.build(output_count, hidden_count + 1) { @weight_init.call }
       ]
+    end
+
+    def default_options
+      {
+          learning_rate: 0.25,
+          activate: lambda { |x| 1 / (1 + Math.exp(-1 * x)) },
+          activate_prime: lambda { |x| x * (1 - x) },
+          weight_init: lambda { rand(-1.0..1.0) }
+      }
     end
 
     def evaluate(inputs)
@@ -61,8 +65,13 @@ module Brainy
       YAML.dump(self)
     end
 
-    def self.from_serialized(dump)
-      YAML.load(dump)
+    def self.from_serialized(dump, options = {})
+      net = YAML.load(dump.class == File ? dump : File.open(dump))
+      options = net.default_options.update(options)
+      net.instance_variable_set(:@activate, options[:activate])
+      net.instance_variable_set(:@activate_prime, options[:activate_prime])
+      net.instance_variable_set(:@weight_init, options[:weight_init])
+      net
     end
   end
 end
