@@ -1,5 +1,3 @@
-require 'java'
-
 module Brainy
   java_import java.util.Random
 
