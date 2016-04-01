@@ -40,7 +40,7 @@ module Brainy
     end
 
     def get_output_deltas(expected, output)
-      expected.zip(output).map do |expect, out|
+      expected.zip(output.to_a).map do |expect, out|
         (out - expect) * @activate_prime.call(out)
       end
     end
