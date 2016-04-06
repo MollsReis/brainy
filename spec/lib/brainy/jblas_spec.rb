@@ -19,26 +19,20 @@ module Brainy
     describe '#*' do
       it 'returns a new matrix from matrix multiplication' do
         result = mat * vec
-        expect(result.to_a).to eq [[5], [11], [17]]
+        expect(result.to_a).to eq [5.0, 11.0, 17.0]
       end
     end
 
     describe '#to_a' do
       it 'returns the matrix data as an array' do
         expect(mat.to_a).to eq mat_data
-        expect(vec.to_a.flatten).to eq vec_data
+        expect(vec.to_a).to eq vec_data
       end
     end
 
-    describe '#rows' do
-      it 'returns the row count' do
-        expect(mat.rows).to eq 3
-      end
-    end
-
-    describe '#columns' do
-      it 'returns the column count' do
-        expect(mat.columns).to eq 2
+    describe '#row_vectors' do
+      it 'returns an array of row vectors' do
+        expect(mat.row_vectors.map(&:to_a)).to eq mat_data
       end
     end
   end

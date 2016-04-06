@@ -1,4 +1,3 @@
-require 'matrix'
 require 'yaml'
 require 'java'
 

@@ -9,8 +9,8 @@ module Brainy
       @activate_prime = options[:activate_prime]
       @weight_init = options[:weight_init]
       @layers = [
-          Matrix.build(hidden_count, input_count + 1) { @weight_init.call },
-          Matrix.build(output_count, hidden_count + 1) { @weight_init.call }
+          JMatrix.build(hidden_count, input_count + 1) { @weight_init.call },
+          JMatrix.build(output_count, hidden_count + 1) { @weight_init.call }
       ]
     end
 
@@ -24,14 +24,14 @@ module Brainy
     end
 
     def evaluate(inputs)
-      @layers.reduce(Vector.elements(inputs)) do |input, layer|
-        (layer * Vector.elements(input.to_a + [1.0])).map(&@activate)
+      @layers.reduce(inputs) do |input, layer|
+        (layer * JMatrix.new(input.to_a + [1.0])).map(&@activate)
       end
     end
 
     def train!(inputs, expected)
-      inputs = Vector.elements(inputs + [1.0])
-      hidden_outs = Vector.elements((@layers.first * inputs).map(&@activate).to_a + [1.0])
+      inputs = JMatrix.new(inputs + [1.0])
+      hidden_outs = JMatrix.new((@layers.first * inputs).map(&@activate).to_a + [1.0])
       output_outs = (@layers.last * hidden_outs).map(&@activate)
       output_deltas = get_output_deltas(expected, output_outs)
       hidden_deltas = get_hidden_deltas(hidden_outs, @layers.last, output_deltas)
@@ -54,10 +54,10 @@ module Brainy
     end
 
     def get_updated_weights(layer, inputs, deltas)
-      Matrix.rows(layer.row_vectors.each_with_index.map do |weights, node_index|
-        Vector.elements(weights.each_with_index.map do |weight, weight_index|
+      JMatrix.new(layer.row_vectors.each_with_index.map do |weights, node_index|
+        weights.each_with_index.map do |weight, weight_index|
           weight - (@learning_rate * inputs[weight_index] * deltas[node_index])
-        end)
+        end
       end)
     end
 

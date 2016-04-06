@@ -24,9 +24,15 @@ module Brainy
     end
 
     def to_a
+      return columns.times.map { |col| @java_matrix.get(0, col) } if rows == 1
+      return rows.times.map { |row| @java_matrix.get(row, 0) } if columns == 1
       rows.times.map do |row|
         columns.times.map { |col| @java_matrix.get(row, col) }
       end
+    end
+
+    def row_vectors
+      rows.times.map { |row| JMatrix.from_java(@java_matrix.getRow(row)) }
     end
 
     def rows
@@ -35,6 +41,19 @@ module Brainy
 
     def columns
       @java_matrix.columns
+    end
+
+    def map(&block)
+      return to_a.map { |a| a.to_a.map(&block) } if to_a.first.is_a? Array
+      to_a.map(&block)
+    end
+
+    def each_with_index(&block)
+      to_a.each_with_index(&block)
+    end
+
+    def [](idx)
+      to_a[idx]
     end
   end
 end
