@@ -5,25 +5,30 @@ module Brainy
     attr_accessor :java_matrix
 
     def initialize(data)
-      data_type = data.first.is_a?(Array) ? Java::double[] : Java::double
-      @java_matrix = DoubleMatrix.new(data.to_java(data_type))
+      if data.is_a?(DoubleMatrix)
+        @java_matrix = data
+      elsif data.first.is_a?(Array)
+        @java_matrix = DoubleMatrix.new(data.to_java(Java::double[]))
+      else
+        @java_matrix = DoubleMatrix.new(data.to_java(Java::double))
+      end
     end
 
-    def self.build(row_count, col_count, &block)
-      JMatrix.new(Array.new(row_count) { Array.new(col_count, &block) })
-    end
-
-    def self.from_java(matrix)
-      new_jmat = JMatrix.new([[]])
-      new_jmat.java_matrix = matrix
-      new_jmat
+    def self.build(row_count, column_count, &block) #TODO refactor for performance (!!!)
+      JMatrix.new(row_count.times.map do |row|
+        column_count.times.map { |col| block.yield(row, col) }
+      end)
     end
 
     def *(mat)
-      JMatrix.from_java(@java_matrix.mmul(mat.java_matrix))
+      JMatrix.new(@java_matrix.mmul(mat.java_matrix))
     end
 
-    def to_a
+    def -(mat)
+      JMatrix.new(@java_matrix.sub(mat.java_matrix))
+    end
+
+    def to_a #TODO refactor this for performance?
       return columns.times.map { |col| @java_matrix.get(0, col) } if rows == 1
       return rows.times.map { |row| @java_matrix.get(row, 0) } if columns == 1
       rows.times.map do |row|
@@ -32,7 +37,7 @@ module Brainy
     end
 
     def row_vectors
-      rows.times.map { |row| JMatrix.from_java(@java_matrix.getRow(row)) }
+      rows.times.map { |row| JMatrix.new(@java_matrix.getRow(row)) }
     end
 
     def rows
@@ -44,7 +49,7 @@ module Brainy
     end
 
     def map(&block)
-      return to_a.map { |a| a.to_a.map(&block) } if to_a.first.is_a? Array
+      return to_a.map { |a| a.to_a.map(&block) } if to_a.first.is_a?(Array)
       to_a.map(&block)
     end
 

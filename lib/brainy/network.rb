@@ -45,20 +45,18 @@ module Brainy
       end
     end
 
-    def get_hidden_deltas(hidden_outs, output_nodes, output_deltas)
+    def get_hidden_deltas(hidden_outs, output_nodes, output_deltas) #TODO fix getting an extra 0 at the end
       hidden_outs.each_with_index.map do |out, index|
         output_nodes.row_vectors.zip(output_deltas)
             .map { |weights, delta| weights[index] * delta }
             .reduce(:+) * @activate_prime.call(out)
-      end
+      end.slice(0...-1) #TODO this is a HACK
     end
 
     def get_updated_weights(layer, inputs, deltas)
-      JMatrix.new(layer.row_vectors.each_with_index.map do |weights, node_index|
-        weights.each_with_index.map do |weight, weight_index|
-          weight - (@learning_rate * inputs[weight_index] * deltas[node_index])
-        end
-      end)
+      layer - JMatrix.build(deltas.count, inputs.to_a.count) do |row, col|
+        @learning_rate * deltas[row] * inputs[col]
+      end
     end
 
     def serialize

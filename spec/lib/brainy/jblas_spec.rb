@@ -23,6 +23,13 @@ module Brainy
       end
     end
 
+    describe '#-' do
+      it 'returns the difference between the two matrices' do
+        result = JMatrix.new([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]) - JMatrix.new([[0.0, 1.0, 2.0], [3.0, 4.0, 5.0]])
+        expect(result.to_a).to eq [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]
+      end
+    end
+
     describe '#to_a' do
       it 'returns the matrix data as an array' do
         expect(mat.to_a).to eq mat_data

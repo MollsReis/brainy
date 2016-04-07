@@ -37,7 +37,7 @@ module Brainy
       end
     end
 
-    describe '#get_hidden_deltas' do
+    describe '#get_hidden_deltas' do #TODO fix this
       it 'provides deltas for the hidden layer' do
         hidden_outs, output_deltas = [0.9, 0.8, 0.7], [0.6, 0.4]
         output_nodes = JMatrix.new([[0.2, 0.3, 0.4], [0.4, 0.3, 0.2]])
