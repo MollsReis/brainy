@@ -42,5 +42,12 @@ module Brainy
         expect(mat.row_vectors.map(&:to_a)).to eq mat_data
       end
     end
+
+    describe '#[]' do
+      it 'returns the specified element of the matrix' do
+        expect(vec[0]).to eq 1.0
+        expect(JMatrix.new([[1.0], [2.0]])[0]).to eq 1.0
+      end
+    end
   end
 end

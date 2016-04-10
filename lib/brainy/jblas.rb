@@ -58,9 +58,7 @@ module Brainy
     end
 
     def [](idx)
-      return @java_matrix.get(0, idx) if rows == 1
-      return @java_matrix.get(idx, 0) if columns == 1
-      to_a[idx]
+      @java_matrix.get(idx)
     end
   end
 end
