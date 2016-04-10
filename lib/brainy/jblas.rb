@@ -28,12 +28,10 @@ module Brainy
       JMatrix.new(@java_matrix.sub(mat.java_matrix))
     end
 
-    def to_a #TODO refactor this for performance?
-      return columns.times.map { |col| @java_matrix.get(0, col) } if rows == 1
-      return rows.times.map { |row| @java_matrix.get(row, 0) } if columns == 1
-      rows.times.map do |row|
-        columns.times.map { |col| @java_matrix.get(row, col) }
-      end
+    def to_a
+      return @java_matrix.getRow(0).toArray.to_a if rows == 1
+      return @java_matrix.getColumn(0).toArray.to_a if columns == 1
+      rows.times.map { |row| @java_matrix.getRow(row).toArray.to_a }
     end
 
     def row_vectors

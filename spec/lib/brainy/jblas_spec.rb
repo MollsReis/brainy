@@ -34,6 +34,7 @@ module Brainy
       it 'returns the matrix data as an array' do
         expect(mat.to_a).to eq mat_data
         expect(vec.to_a).to eq vec_data
+        expect(JMatrix.new([[1.0], [2.0]]).to_a).to eq [1.0, 2.0]
       end
     end
 
