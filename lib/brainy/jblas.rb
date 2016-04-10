@@ -31,11 +31,11 @@ module Brainy
     def to_a
       return @java_matrix.getRow(0).toArray.to_a if rows == 1
       return @java_matrix.getColumn(0).toArray.to_a if columns == 1
-      rows.times.map { |row| @java_matrix.getRow(row).toArray.to_a }
+      @java_matrix.rowsAsList.toArray.map { |row| row.toArray.to_a }
     end
 
     def row_vectors
-      rows.times.map { |row| JMatrix.new(@java_matrix.getRow(row)) }
+      @java_matrix.rowsAsList.toArray.map { |row| JMatrix.new(row) }
     end
 
     def rows
