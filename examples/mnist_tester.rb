@@ -30,8 +30,8 @@ test_data = labels.zip(images)
 correct = test_data.each_with_index.map do |example, idx|
   expected, inputs = example
   output = net.evaluate(inputs).to_a
-  print ("\r%% %.2f" % (100 * idx.to_f / test_data.length)).ljust(20, ' ')
+  print ("\r%% %.3f" % (100 * idx.to_f / test_data.length)).ljust(20, ' ')
   output.index(output.max) == expected.index(expected.max) ? 1 : 0
 end.reduce(:+)
-print "\r% 100.00".ljust(20, ' ') + "\n"
+print "\r% 100.000".ljust(20, ' ') + "\n"
 puts 'correct answers: %% %.2f' % (100.0 * correct / test_data.length)
