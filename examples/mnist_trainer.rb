@@ -1,5 +1,6 @@
 # Example training using MNIST OCR set
-# NOTE: this is a time consuming script, took ~1.5 hours on my MacBook Pro
+# NOTE: this script took ~1.5 hours to complete on my MacBook Pro using the following command:
+# $ time caffeinate -i ruby -J-Xmx4000m examples/mnist_trainer.rb
 #
 # MNIST dataset files not included, get them here:
 # http://yann.lecun.com/exdb/mnist/
