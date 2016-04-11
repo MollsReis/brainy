@@ -60,15 +60,13 @@ module Brainy
     end
 
     def serialize
-      YAML.dump(self)
+      YAML.dump({ layers: layers.map(&:to_a) })
     end
 
     def self.from_serialized(dump, options = {})
-      net = YAML.load(dump.class == File ? dump : File.open(dump))
-      options = net.default_options.update(options)
-      net.instance_variable_set(:@activate, options[:activate])
-      net.instance_variable_set(:@activate_prime, options[:activate_prime])
-      net.instance_variable_set(:@weight_init, options[:weight_init])
+      layer_values = YAML.load(dump.class == File ? dump : File.open(dump))[:layers]
+      net = Network.new(1, 1, 1, options)
+      net.layers = layer_values.map { |vals| JMatrix.new(vals) }
       net
     end
   end
