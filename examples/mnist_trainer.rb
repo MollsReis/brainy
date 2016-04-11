@@ -1,5 +1,5 @@
 # Example training using MNIST OCR set
-# NOTE: this script took ~1.5 hours to complete on my MacBook Pro using the following command:
+# NOTE: this script took ~1.75 hours to complete on my MacBook Pro using the following command:
 # $ time caffeinate -i ruby -J-Xmx4000m examples/mnist_trainer.rb
 #
 # MNIST dataset files not included, get them here:
@@ -34,7 +34,7 @@ training_data = training_labels.zip(training_images)
 testing_data = testing_labels.zip(testing_images)
 
 puts 'training...'
-net = Brainy::Network.new(784, 300, 10, learning_rate: 0.025)
+net = Brainy::Network.new(784, 300, 10, learning_rate: 0.002)
 training_data.shuffle.each_with_index do |datum, idx|
   expected, inputs = datum
   net.train!(inputs, expected)
