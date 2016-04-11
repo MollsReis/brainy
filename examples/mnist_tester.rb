@@ -1,5 +1,4 @@
 # Example testing loaded net (mnist.yaml) for % answers correct
-# NOTE: this is a time consuming script, took ~20 minutes on my MacBook Pro (using JRuby)
 #
 # MNIST dataset files not included, get them here:
 # http://yann.lecun.com/exdb/mnist/
