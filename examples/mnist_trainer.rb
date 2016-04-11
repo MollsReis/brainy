@@ -35,7 +35,7 @@ testing_data = testing_labels.zip(testing_images)
 
 puts 'training...'
 net = Brainy::Network.new(784, 300, 10, learning_rate: 0.025)
-training_data.shuffle.first(100).each_with_index do |datum, idx|
+training_data.shuffle.each_with_index do |datum, idx|
   expected, inputs = datum
   net.train!(inputs, expected)
   print ("\r%% %.3f" % (100.0 * idx / training_data.length)).ljust(20, ' ')
@@ -43,7 +43,7 @@ end
 print "\r% 100.000".ljust(20, ' ') + "\n"
 
 puts 'testing...'
-mse = testing_data.shuffle.first(100).each_with_index.map do |datum, idx|
+mse = testing_data.shuffle.each_with_index.map do |datum, idx|
   expected, inputs = datum
   output = net.evaluate(inputs).zip(expected).map { |x, y| (x - y) ** 2 }.reduce(:+) / 10
   print ("\r%% %.3f" % (100 * idx.to_f / testing_data.length)).ljust(20, ' ')
