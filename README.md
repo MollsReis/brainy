@@ -4,6 +4,9 @@ Brainy is an [Artificial Neural Network (ANN)](https://en.wikipedia.org/wiki/Art
 [Backpropagation](https://en.wikipedia.org/wiki/Backpropagation) algorithm. It was originally created as part of 
 the Neural NFL project [here](https://github.com/EvilScott/neuralnfl), but was broken out into a gem to be more reusable.
 
+_NOTE_: As of v2.0 Brainy is _JRuby only_. This decision was made for performance reasons, as it can now leverage the fast linear algebra functionality
+found in the [JBLAS](http://jblas.org/) Java library.
+
 ### Usage
 From [examples/sin.rb](https://github.com/EvilScott/brainy/blob/master/examples/sin.rb):
 ```ruby
