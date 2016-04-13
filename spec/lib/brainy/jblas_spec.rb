@@ -17,9 +17,17 @@ module Brainy
     end
 
     describe '#*' do
-      it 'returns a new matrix from matrix multiplication' do
-        result = mat * vec
-        expect(result.to_a).to eq [5.0, 11.0, 17.0]
+      context 'when the second param is a matrix' do
+        it 'returns a new matrix from matrix multiplication' do
+          result = mat * vec
+          expect(result.to_a).to eq [5.0, 11.0, 17.0]
+        end
+      end
+      context 'when the second param is a scalar' do
+        it 'returns a new matrix from scalar multiplication' do
+          result = mat * 2.0
+          expect(result.to_a).to eq mat_data.map { |x| x.map { |y| y * 2.0 }}
+        end
       end
     end
 

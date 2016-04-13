@@ -20,8 +20,12 @@ module Brainy
       end)
     end
 
-    def *(mat)
-      JMatrix.new(@java_matrix.mmul(mat.java_matrix))
+    def *(x)
+      if x.is_a? JMatrix
+        JMatrix.new(@java_matrix.mmul(x.java_matrix))
+      else
+        JMatrix.new(@java_matrix.mul(x))
+      end
     end
 
     def -(mat)
