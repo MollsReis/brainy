@@ -19,7 +19,7 @@ module Brainy
     def default_options
       {
           learning_rate: 0.25,
-          momentum: 0.1,
+          momentum: 0.9,
           activate: lambda { |x| 1 / (1 + Math.exp(-1 * x)) },
           activate_prime: lambda { |x| x * (1 - x) },
           weight_init: lambda { Gaussian.next }
