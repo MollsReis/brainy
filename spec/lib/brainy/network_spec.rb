@@ -46,21 +46,16 @@ module Brainy
       end
     end
 
-    describe '#get_updated_weights' do
+    describe '#get_weight_change' do
       it 'updates the hidden weights' do
-        layer = JMatrix.new([
-            [0.3, 0.4, 0.5, 0.6],
-            [0.1, 0.2, 0.4, 0.8],
-            [0.9, 0.6, 0.3, 0.0]
-        ])
         inputs, deltas = [0.2, 0.3, 0.4, 0.5], [0.7, 0.6, 0.5]
-        new_layer = net.get_updated_weights(layer, inputs, deltas)
+        change = net.get_weight_change(inputs, deltas)
         expected = [
-            [0.265, 0.3475, 0.43, 0.5125],
-            [0.07, 0.155, 0.34, 0.725],
-            [0.875, 0.5625, 0.25, -0.0625]
+            [0.035, 0.0525, 0.07, 0.0875],
+            [0.03, 0.045, 0.06, 0.075],
+            [0.025, 0.0375, 0.05, 0.0625],
         ]
-        expect(new_layer.map { |x| x.round(6) }).to eq expected
+        expect(change.map { |x| x.round(6) }).to eq expected
       end
     end
   end
