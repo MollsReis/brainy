@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = 'reis.robert.s@gmail.com'
   s.files       = Dir['{lib,spec}/**/*', 'README.md', 'LICENSE']
   s.homepage    = 'https://github.com/EvilScott/brainy'
-  s.required_ruby_version = '>= 1.9.3'
-  s.add_development_dependency 'rspec', ['~> 3.2.0']
-  s.add_development_dependency 'rake', ['~> 10.4.2']
+  s.platform    = 'java'
+  s.add_development_dependency 'rspec', ['~> 3.2']
+  s.add_development_dependency 'rake', ['~> 10.4']
 end
