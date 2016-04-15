@@ -22,7 +22,7 @@ module Brainy
           momentum: 0.9,
           activate: lambda { |x| 1 / (1 + Math.exp(-1 * x)) },
           activate_prime: lambda { |x| x * (1 - x) },
-          weight_init: lambda { Gaussian.next }
+          weight_init: lambda { Gaussian.next * 0.1 }
       }
     end
 

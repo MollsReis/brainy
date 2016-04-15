@@ -5,7 +5,7 @@ module Brainy
     @rand = Random.new
 
     def self.next
-      @rand.nextGaussian * 0.1
+      @rand.nextGaussian
     end
   end
 end
