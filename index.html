@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Brainy : An Artificial Neural Network">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Brainy</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/EvilScott/brainy">View on GitHub</a>
+
+          <h1 id="project_title">Brainy</h1>
+          <h2 id="project_tagline">An Artificial Neural Network</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/EvilScott/brainy/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/EvilScott/brainy/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="brainy---an-artificial-neural-network-" class="anchor" href="#brainy---an-artificial-neural-network-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Brainy - An Artificial Neural Network <a href="https://travis-ci.org/EvilScott/brainy"><img src="https://travis-ci.org/EvilScott/brainy.svg?branch=master" alt="Build Status"></a>
+</h1>
+
+<p>Brainy is an <a href="https://en.wikipedia.org/wiki/Artificial_neural_network">Artificial Neural Network (ANN)</a> using the 
+<a href="https://en.wikipedia.org/wiki/Backpropagation">Backpropagation</a> algorithm. It was originally created as part of 
+the Neural NFL project <a href="https://github.com/EvilScott/neuralnfl">here</a>, but was broken out into a gem to be more reusable.</p>
+
+<p><em>NOTE</em>: As of v2.0 Brainy is <em>JRuby only</em>. This decision was made for performance reasons, as it can now leverage the fast linear algebra functionality
+found in the <a href="http://jblas.org/">JBLAS</a> Java library.</p>
+
+<h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h3>
+
+<p>Brainy is hosted on <a href="https://rubygems.org/gems/brainy/">RubyGems.org</a> making installation easy.</p>
+
+<pre><code>$ gem install brainy
+</code></pre>
+
+<h3>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h3>
+
+<p>From <a href="https://github.com/EvilScott/brainy/blob/master/examples/sin.rb">examples/sin.rb</a>:</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-c"># Example using sin wave function</span>
+<span class="pl-k">require</span> <span class="pl-s"><span class="pl-pds">'</span>brainy<span class="pl-pds">'</span></span>
+net <span class="pl-k">=</span> <span class="pl-c1">Brainy</span>::<span class="pl-c1">Network</span>.<span class="pl-k">new</span>(<span class="pl-c1">1</span>, <span class="pl-c1">3</span>, <span class="pl-c1">1</span>, <span class="pl-c1">learning_rate:</span> <span class="pl-c1">1.0</span>)
+
+<span class="pl-c"># training</span>
+<span class="pl-c1">4000</span>.times <span class="pl-k">do</span>
+  i <span class="pl-k">=</span> rand(<span class="pl-c1">0</span>..(<span class="pl-c1">Math</span>::<span class="pl-c1">PI</span><span class="pl-k">/</span><span class="pl-c1">2</span>))
+  o <span class="pl-k">=</span> <span class="pl-c1">Math</span>.sin(i)
+  net.train!([i], [o])
+<span class="pl-k">end</span>
+
+<span class="pl-c"># testing</span>
+mse <span class="pl-k">=</span> <span class="pl-c1">1000</span>.times.map <span class="pl-k">do</span>
+  i <span class="pl-k">=</span> rand(<span class="pl-c1">0</span>..(<span class="pl-c1">Math</span>::<span class="pl-c1">PI</span><span class="pl-k">/</span><span class="pl-c1">2</span>))
+  o <span class="pl-k">=</span> <span class="pl-c1">Math</span>.sin(i)
+  (o <span class="pl-k">-</span> net.evaluate([i]).first) <span class="pl-k">**</span> <span class="pl-c1">2</span>
+<span class="pl-k">end</span>.reduce(<span class="pl-c1">:+</span>) <span class="pl-k">/</span> <span class="pl-c1">1000</span>
+
+puts <span class="pl-s"><span class="pl-pds">"</span>your MSE: <span class="pl-pse">#{</span><span class="pl-s1"> mse.round(<span class="pl-c1">6</span>) </span><span class="pl-pse"><span class="pl-s1">}</span></span><span class="pl-pds">"</span></span> <span class="pl-c"># smaller is better</span></pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Brainy maintained by <a href="https://github.com/EvilScott">EvilScott</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
