@@ -7,11 +7,17 @@ the Neural NFL project [here](https://github.com/EvilScott/neuralnfl), but was b
 _NOTE_: As of v2.0 Brainy is _JRuby only_. This decision was made for performance reasons, as it can now leverage the fast linear algebra functionality
 found in the [JBLAS](http://jblas.org/) Java library.
 
+### Installation
+Brainy is hosted on [RubyGems.org](https://rubygems.org/gems/brainy/) making installation easy.
+```
+$ gem install brainy
+```
+
 ### Usage
 From [examples/sin.rb](https://github.com/EvilScott/brainy/blob/master/examples/sin.rb):
 ```ruby
 # Example using sin wave function
-require_relative '../lib/brainy'
+require 'brainy'
 net = Brainy::Network.new(1, 3, 1, learning_rate: 1.0)
 
 # training
